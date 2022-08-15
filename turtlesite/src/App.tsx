@@ -25,6 +25,7 @@ function App() {
     axios.get(`http://localhost:5500/computers`)
       .then(response => {
         const data = response.data as { [id: string]: typeComputer }
+        console.log(data)
         setcomputers(Object.values(data))
       }, error => {
         console.log(error);

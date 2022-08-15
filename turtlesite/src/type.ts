@@ -1,7 +1,6 @@
 export type typeComputer = {
     type: "turtle"
     pos: typexyz
-    sock: WebSocket
     id: string
 }
 

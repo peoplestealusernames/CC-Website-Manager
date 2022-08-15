@@ -23,7 +23,8 @@ app.get("/blocks", async (req, res) => {
 })
 
 app.get("/computers", (req, res) => {
-    res.json(computers)
+    const post = Object.values(computers).map(e => { return { ...e, sock: null } })
+    res.json(post)
     res.statusCode = 200
     res.end()
 })
