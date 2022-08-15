@@ -4,6 +4,7 @@ import { createServer } from "http";
 import { JsonDB } from "node-json-db";
 import { Config } from "node-json-db/dist/lib/JsonDBConfig";
 import { WebSocketServer, WebSocket } from "ws";
+import { sendCommand, sendCommands } from "./computerAPI/sendCommands";
 
 const blockdata = new JsonDB(new Config("./blockdata", true, true, "/"))
 
@@ -64,19 +65,6 @@ app.post("/raw/:computer/:command", async (req, res) => {
     res.statusCode = 200
     res.end()
 })
-
-function sendCommands(sock: WebSocket, ...commands: string[]): Promise<[success: boolean, errOrRet1: string | any, ...Ret: any[]]> {
-    const send = commands.map(e => `{${e}}`).join(",")
-    return sendCommand(sock, send)
-}
-
-function sendCommand(sock: WebSocket, command: string): Promise<[success: boolean, errOrRet1: string | any, ...Ret: any[]]> {
-    return new Promise((res, rej) => {
-        const resData = (data: Buffer) => res(JSON.parse(data.toString()))
-        sock.once("message", resData)
-        sock.send(command)
-    })
-}
 
 const server = createServer(app)
 const sock = new WebSocketServer({ server })
