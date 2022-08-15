@@ -1,7 +1,10 @@
-local ws, err = http.websocket("ws://localhost:5500")
-
-if (not ws) then
-    return err
+function GetWS()
+    local ws, err = http.websocket("ws://localhost:5500")
+    if (not ws) then
+        sleep(1)
+        return GetWS()
+    end
+    return ws
 end
 
 function ProccessCall(fncString)
@@ -15,9 +18,16 @@ function ProccessCall(fncString)
     return pcall(loadfnc);
 end
 
+function ReciveLoop(ws)
+    while true do
+        local msg = ws.receive()
+        ws.send(
+            ProccessCall(msg)
+        )
+    end
+end
+
 while true do
-    local msg = ws.receive()
-    ws.send(
-        ProccessCall(msg)
-    )
+    local res, ws = pcall(GetWS)
+    pcall(ReciveLoop, ws)
 end
