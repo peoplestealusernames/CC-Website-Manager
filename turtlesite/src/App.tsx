@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, Camera } from '@react-three/fiber';
 import { Box } from './three';
 import axios from 'axios';
 
@@ -13,8 +13,8 @@ function App() {
   useMemo(() =>
     axios.get(`http://localhost:5500/blocks`)
       .then(response => {
-        const data = response.data as typeBlock[]
-        setblocks(data)
+        const data = response.data as { [x: string]: typeBlock }
+        setblocks(Object.values(data))
       }, error => {
         console.log(error);
       })
@@ -44,8 +44,12 @@ function App() {
       }}>
         {computers.map(e => e)}
       </div>
-      <Canvas style={{ position: "absolute", width: "100%", height: "100%" }}>
-        <pointLight position={[10, 10, 10]} />
+      <Canvas
+        style={{ position: "absolute", width: "100%", height: "100%" }}
+        camera={{ position: [-10, 0, 0], near: 5, far: 200 }}
+      >
+        <pointLight position={[-10, 100, 100]} intensity={2} />
+        <Box position={[0, 0, 0]} />
         {blocks.map((e, i) => <Box key={i} position={[e.pos.x, e.pos.y, e.pos.z]} />)}
       </Canvas>
     </div>
