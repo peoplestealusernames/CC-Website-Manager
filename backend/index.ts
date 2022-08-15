@@ -26,6 +26,27 @@ app.get("/computers", (req, res) => {
     res.end()
 })
 
+app.post("/move/:computer", async (req, res) => {
+    const sock = computers[req.params.computer]
+    if (!sock) {
+        res.write("Computer not found")
+        res.statusCode = 404
+        res.end()
+        return
+    }
+    res.json(await sendCommand(sock, "turtle.forward()"))
+    res.statusCode = 200
+    res.end()
+})
+
+function sendCommand(sock: WebSocket, command: string) {
+    return new Promise((res, rej) => {
+        const resData = (data: Buffer) => res(data.toString())
+        sock.once("message", resData)
+        sock.send(command)
+    })
+}
+
 const server = createServer(app)
 const sock = new WebSocketServer({ server })
 sock.on('connection', (client, req) => {
