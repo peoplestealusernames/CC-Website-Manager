@@ -4,8 +4,7 @@ import './App.css';
 import { Canvas, Camera } from '@react-three/fiber';
 import { Box } from './three';
 import axios from 'axios';
-
-type typeBlock = { name: string, pos: { x: number, y: number, z: number } }
+import { typeBlock } from './type';
 
 function App() {
   const [blocks, setblocks] = useState<typeBlock[]>([])
