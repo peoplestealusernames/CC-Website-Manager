@@ -41,7 +41,7 @@ app.post("/move/:computer", async (req, res) => {
 
 function sendCommand(sock: WebSocket, command: string) {
     return new Promise((res, rej) => {
-        const resData = (data: Buffer) => res(data.toString())
+        const resData = (data: Buffer) => res(JSON.parse(data.toString()))
         sock.once("message", resData)
         sock.send(command)
     })
