@@ -1,5 +1,6 @@
-function GetWS(headers)
-    local ws, err = http.websocket("ws://localhost:5500", headers)
+function GetWS()
+    local ws, err = http.websocket("ws://localhost:5500",
+        { type = "computer", computerid = tostring(os.getComputerID()) })
     if (not ws) then
         sleep(1)
         return GetWS()
@@ -27,9 +28,7 @@ function ReciveLoop(ws)
     end
 end
 
-local id = tostring(os.getComputerID())
-
 while true do
-    local res, ws = pcall(GetWS, { type = "computer", computerid = id })
+    local res, ws = pcall(GetWS)
     pcall(ReciveLoop, ws)
 end
