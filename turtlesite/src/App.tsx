@@ -14,8 +14,19 @@ function App() {
     axios.get(`http://localhost:5500/blocks`)
       .then(response => {
         const data = response.data as typeBlock[]
-        console.log(data);
         setblocks(data)
+      }, error => {
+        console.log(error);
+      })
+    , [])
+
+  const [computers, setcomputers] = useState<string[]>([])
+
+  useMemo(() =>
+    axios.get(`http://localhost:5500/computers`)
+      .then(response => {
+        const data = response.data as string[]
+        setcomputers(data)
       }, error => {
         console.log(error);
       })
@@ -23,10 +34,20 @@ function App() {
 
   return (
     <div className="App">
+      <div style={{
+        position: "absolute",
+        width: "100vw",
+        justifyContent: "center",
+        justifyItems: "center",
+        alignItems: "center",
+        alignContent: "center",
+      }}>
+        {computers.map(e => e)}
+      </div>
       <Canvas style={{ position: "absolute", width: "100%", height: "100%" }}>
         <pointLight position={[10, 10, 10]} />
         {blocks.map((e, i) => <Box key={i} position={[e.pos.x, e.pos.y, e.pos.z]} />)}
-      </Canvas>,
+      </Canvas>
     </div>
   );
 }
