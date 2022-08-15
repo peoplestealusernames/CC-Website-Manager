@@ -39,6 +39,19 @@ app.post("/move/:computer", async (req, res) => {
     res.end()
 })
 
+app.post("/raw/:computer/:command", async (req, res) => {
+    const sock = computers[req.params.computer]
+    if (!sock) {
+        res.write("Computer not found")
+        res.statusCode = 404
+        res.end()
+        return
+    }
+    res.json(await sendCommand(sock, req.params.command))
+    res.statusCode = 200
+    res.end()
+})
+
 function sendCommand(sock: WebSocket, command: string) {
     return new Promise((res, rej) => {
         const resData = (data: Buffer) => res(JSON.parse(data.toString()))
