@@ -47,7 +47,7 @@ app.get("/surround/:computer", async (req, res) => {
         res.end()
         return
     }
-    res.json(await sendCommand(sock, "{turtle.inspectUp()},{turtle.inspect()},{turtle.inspectDown()}"))
+    res.json(await sendCommands(sock, "turtle.inspectUp()", "turtle.inspect()", "turtle.inspectDown()"))
     res.statusCode = 200
     res.end()
 })
@@ -65,7 +65,12 @@ app.post("/raw/:computer/:command", async (req, res) => {
     res.end()
 })
 
-function sendCommand(sock: WebSocket, command: string) {
+function sendCommands(sock: WebSocket, ...commands: string[]): Promise<[success: boolean, errOrRet1: string | any, ...Ret: any[]]> {
+    const send = commands.map(e => `{${e}}`).join(",")
+    return sendCommand(sock, send)
+}
+
+function sendCommand(sock: WebSocket, command: string): Promise<[success: boolean, errOrRet1: string | any, ...Ret: any[]]> {
     return new Promise((res, rej) => {
         const resData = (data: Buffer) => res(JSON.parse(data.toString()))
         sock.once("message", resData)
