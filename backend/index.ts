@@ -86,8 +86,6 @@ sock.on('connection', (client, req) => {
         computers[req.headers.computerid] = client
         console.log(`Computer: ${req.headers.computerid} connected`);
     }
-
-    client.on('message', (data) => console.log(data.toString()));
     client.on("close", () => console.log("close"))
 });
 
