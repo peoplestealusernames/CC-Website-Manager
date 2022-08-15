@@ -19,6 +19,13 @@ app.get("/blocks", async (req, res) => {
     res.end()
 })
 
+app.get("/computers", (req, res) => {
+    const ids = Object.keys(computers)
+    res.json(ids)
+    res.statusCode = 200
+    res.end()
+})
+
 const server = createServer(app)
 const sock = new WebSocketServer({ server })
 sock.on('connection', (client, req) => {
