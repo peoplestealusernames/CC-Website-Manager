@@ -9,9 +9,9 @@ function GetWS()
 end
 
 function ProccessCall(fncString)
-    local loadfnc, loaderr = load(fncString);
+    local loadfnc, loaderr = load("return " .. fncString);
     if (not loadfnc) then
-        loadfnc, loaderr = load("return " .. fncString);
+        loadfnc, loaderr = load(fncString);
     end
     if (not loadfnc) then
         return false, loaderr;
@@ -23,7 +23,7 @@ function ReciveLoop(ws)
     while true do
         local msg = ws.receive()
         ws.send(
-            ProccessCall(msg)
+            textutils.serialiseJSON { ProccessCall(msg) }
         )
     end
 end
