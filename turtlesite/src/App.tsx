@@ -4,7 +4,7 @@ import './App.css';
 import { Canvas, Camera } from '@react-three/fiber';
 import { Box } from './three';
 import axios from 'axios';
-import { typeBlock } from './type';
+import { typeBlock, typeComputer } from './type';
 
 function App() {
   const [blocks, setblocks] = useState<typeBlock[]>([])
@@ -19,13 +19,13 @@ function App() {
       })
     , [])
 
-  const [computers, setcomputers] = useState<string[]>([])
+  const [computers, setcomputers] = useState<typeComputer[]>([])
 
   useMemo(() =>
     axios.get(`http://localhost:5500/computers`)
       .then(response => {
-        const data = response.data as string[]
-        setcomputers(data)
+        const data = response.data as { [id: string]: typeComputer }
+        setcomputers(Object.values(data))
       }, error => {
         console.log(error);
       })
@@ -41,7 +41,7 @@ function App() {
         alignItems: "center",
         alignContent: "center",
       }}>
-        {computers.map(e => e)}
+        {computers.map(e => e.id)}
       </div>
       <Canvas
         style={{ position: "absolute", width: "100%", height: "100%" }}

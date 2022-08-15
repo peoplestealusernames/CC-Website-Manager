@@ -5,4 +5,5 @@ export type Turtle = {
     type: "turtle"
     pos: xyz
     sock: WebSocket
+    id: string
 }

@@ -23,8 +23,7 @@ app.get("/blocks", async (req, res) => {
 })
 
 app.get("/computers", (req, res) => {
-    const ids = Object.keys(computers)
-    res.json(ids)
+    res.json(computers)
     res.statusCode = 200
     res.end()
 })
@@ -73,7 +72,7 @@ const sock = new WebSocketServer({ server })
 sock.on('connection', (client, req) => {
     console.log("connect")
     if (req.headers.type === "computer" && typeof req.headers.computerid === "string") {
-        computers[req.headers.computerid] = { type: "turtle", sock: client, pos: { x: 10, y: 10, z: 10 } }
+        computers[req.headers.computerid] = { type: "turtle", sock: client, pos: { x: 10, y: 10, z: 10 }, id: req.headers.computerid }
         updateSurroundings(blockdata, computers[req.headers.computerid])
         console.log(`Computer: ${req.headers.computerid} connected`);
     }
