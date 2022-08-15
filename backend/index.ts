@@ -39,6 +39,19 @@ app.post("/move/:computer", async (req, res) => {
     res.end()
 })
 
+app.get("/surround/:computer", async (req, res) => {
+    const sock = computers[req.params.computer]
+    if (!sock) {
+        res.write("Computer not found")
+        res.statusCode = 404
+        res.end()
+        return
+    }
+    res.json(await sendCommand(sock, "{turtle.inspectUp()},{turtle.inspect()},{turtle.inspectDown()}"))
+    res.statusCode = 200
+    res.end()
+})
+
 app.post("/raw/:computer/:command", async (req, res) => {
     const sock = computers[req.params.computer]
     if (!sock) {
