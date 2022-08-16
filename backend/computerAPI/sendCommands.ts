@@ -7,8 +7,15 @@ export function sendCommands(sock: WebSocket, ...commands: string[]): Promise<[s
 
 export function sendCommand(sock: WebSocket, command: string): Promise<[success: boolean, errOrRet1: string | any, ...Ret: any[]]> {
     return new Promise((res, rej) => {
-        const resData = (data: Buffer) => res(JSON.parse(data.toString()))
-        sock.once("message", resData)
+        const resData = (data: Buffer) => {
+            const json = JSON.parse(data.toString())
+
+            if (json.req == command) {
+                sock.off("message", resData)
+                res(json.res)
+            }
+        }
+        sock.on("message", resData)
         sock.send(command)
     })
 }

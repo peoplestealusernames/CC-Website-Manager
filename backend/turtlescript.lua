@@ -231,7 +231,7 @@ function ReciveLoop()
     while true do
         local msg = ws.receive()
         ws.send(
-            textutils.serialiseJSON({ ProccessCall(msg) })
+            textutils.serialiseJSON({ req = msg, res = { ProccessCall(msg) } })
         )
     end
 end
