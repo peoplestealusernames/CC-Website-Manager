@@ -53,8 +53,7 @@ function App() {
       >
         <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
         <pointLight position={[-10, 100, 100]} intensity={2} />
-        <BlockRender position={[0, 0, 0]} />
-        {blocks.map((e, i) => <BlockRender key={i} position={[e.pos.x, e.pos.y, e.pos.z]} />)}
+        {blocks.map((e, i) => <BlockRender key={i} block={e} />)}
       </Canvas>
     </div>
   );
