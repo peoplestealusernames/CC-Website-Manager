@@ -6,6 +6,7 @@ import { BlockRender } from './Block';
 import axios from 'axios';
 import { typeBlock, typeComputer } from './type';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
+import { RenderTurtle } from './Turtle';
 
 function App() {
   const [blocks, setblocks] = useState<typeBlock[]>([])
@@ -54,6 +55,7 @@ function App() {
         <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
         <pointLight position={[-10, 100, 100]} intensity={2} />
         {blocks.map((e, i) => <BlockRender key={i} block={e} />)}
+        {computers.map((e, i) => <RenderTurtle key={i} turtle={e} />)}
       </Canvas>
     </div>
   );
