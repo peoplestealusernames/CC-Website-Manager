@@ -97,13 +97,13 @@ app.post("/raw/:computer/:command", async (req, res) => {
 const server = createServer(app)
 const sock = new WebSocketServer({ server })
 sock.on('connection', (client, req) => {
-    console.log("connect")
-    if (req.headers.type === "computer" && typeof req.headers.computerid === "string") {
+    console.log("connect", req.url)
+    if (req.url === "/computer" && typeof req.headers.computerid === "string") {
         const pos = JSON.parse(req.headers.pos as string)
         computers[req.headers.computerid] = { type: "turtle", sock: client, pos, id: req.headers.computerid, dir: parseInt(req.headers.dir as string) }
         setupComputerSocket(computers[req.headers.computerid])
         console.log(`Computer: ${req.headers.computerid} connected`);
-    } else if (req.headers.type === "listner") {
+    } else if (req.url === "/listner") {
         databaseEvent.on("blockUpdate", client.send)
         client.on("close", () => databaseEvent.off("blockUpdate", client.send))
     }

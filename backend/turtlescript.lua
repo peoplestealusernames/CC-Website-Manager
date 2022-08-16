@@ -209,7 +209,7 @@ Update()
 --Init
 
 function GetWS()
-    local newws, err = http.websocket("ws://localhost:5500",
+    local newws, err = http.websocket("ws://localhost:5500/computer",
         { type = "computer", computerid = tostring(os.getComputerID()), pos = textutils.serialiseJSON(Pos),
             dir = tostring(Dir) })
     if (not newws) then
