@@ -3,7 +3,7 @@ import { Turtle } from "../turtleAPI/turtleTypes";
 
 
 
-export function setupComputerSocket(db: JsonDB, computer: Turtle) {
+export function setupComputerSocket(computer: Turtle) {
     computer.sock.on("message", (data) => {
         const json = JSON.parse(data.toString())
         if (json.pos)

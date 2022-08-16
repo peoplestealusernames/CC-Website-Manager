@@ -6,11 +6,11 @@ import { UpdateBlocks } from "../dataBase/manager";
 import { addPos, xyz } from "../posManager";
 import { Turtle } from "./turtleTypes";
 
-export function forward(db: JsonDB, turtle: Turtle) {
+export function forward(turtle: Turtle) {
 
 }
 
-export async function updateSurroundings(db: JsonDB, turtle: Turtle) {
+export async function updateSurroundings(turtle: Turtle) {
     const blocks = await getSurroundings(turtle)
     const offsets: xyz[] = [{ x: 0, y: 1, z: 0 }, { x: 1, y: 0, z: 0 }, { x: 0, y: -1, z: 0 }]
 
@@ -22,7 +22,7 @@ export async function updateSurroundings(db: JsonDB, turtle: Turtle) {
         }
     })
 
-    UpdateBlocks(db, ...newBlocks)
+    UpdateBlocks(...newBlocks)
 }
 
 export function getSurroundings(turtle: Turtle) {

@@ -6,10 +6,9 @@ import { Config } from "node-json-db/dist/lib/JsonDBConfig";
 import { WebSocketServer, WebSocket } from "ws";
 import { sendCommand, sendCommands } from "./computerAPI/sendCommands";
 import { setupComputerSocket } from "./computerAPI/socketSetup";
+import { GetAllBlocks } from "./dataBase/manager";
 import { updateSurroundings } from "./turtleAPI/movement";
 import { Turtle } from "./turtleAPI/turtleTypes";
-
-const blockdata = new JsonDB(new Config("./blockdata", true, true, "/"))
 
 const computers: { [id: string]: Turtle } = {}
 
@@ -17,7 +16,7 @@ const app = express()
 app.use(cors({ origin: true }))
 
 app.get("/blocks", async (req, res) => {
-    res.json(await blockdata.getData("/blocks"))
+    res.json(await GetAllBlocks())
 
     res.statusCode = 200
     res.end()
@@ -76,8 +75,8 @@ sock.on('connection', (client, req) => {
     if (req.headers.type === "computer" && typeof req.headers.computerid === "string") {
         const pos = JSON.parse(req.headers.pos as string)
         computers[req.headers.computerid] = { type: "turtle", sock: client, pos, id: req.headers.computerid }
-        setupComputerSocket(blockdata, computers[req.headers.computerid])
-        updateSurroundings(blockdata, computers[req.headers.computerid])
+        setupComputerSocket(computers[req.headers.computerid])
+        updateSurroundings(computers[req.headers.computerid])
         console.log(`Computer: ${req.headers.computerid} connected`);
     }
     client.on("close", () => console.log("close"))
