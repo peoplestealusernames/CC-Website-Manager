@@ -5,6 +5,7 @@ import { JsonDB } from "node-json-db";
 import { Config } from "node-json-db/dist/lib/JsonDBConfig";
 import { WebSocketServer, WebSocket } from "ws";
 import { sendCommand, sendCommands } from "./computerAPI/sendCommands";
+import { setupComputerSocket } from "./computerAPI/socketSetup";
 import { updateSurroundings } from "./turtleAPI/movement";
 import { Turtle } from "./turtleAPI/turtleTypes";
 
@@ -75,6 +76,7 @@ sock.on('connection', (client, req) => {
     if (req.headers.type === "computer" && typeof req.headers.computerid === "string") {
         const pos = JSON.parse(req.headers.pos as string)
         computers[req.headers.computerid] = { type: "turtle", sock: client, pos, id: req.headers.computerid }
+        setupComputerSocket(blockdata, computers[req.headers.computerid])
         updateSurroundings(blockdata, computers[req.headers.computerid])
         console.log(`Computer: ${req.headers.computerid} connected`);
     }
