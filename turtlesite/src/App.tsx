@@ -1,10 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Canvas, Camera } from '@react-three/fiber';
+import { Canvas, Camera, useThree } from '@react-three/fiber';
 import { Box } from './three';
 import axios from 'axios';
 import { typeBlock, typeComputer } from './type';
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 
 function App() {
   const [blocks, setblocks] = useState<typeBlock[]>([])
@@ -48,9 +49,10 @@ function App() {
         )}
       </div>
       <Canvas
-        style={{ width: "100%", height: "100%" }}
+        style={{ position: "absolute", width: "100%", height: "100%" }}
         camera={{ position: [-10, 0, 0], near: 5, far: 200 }}
       >
+        <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
         <pointLight position={[-10, 100, 100]} intensity={2} />
         <Box position={[0, 0, 0]} />
         {blocks.map((e, i) => <Box key={i} position={[e.pos.x, e.pos.y, e.pos.z]} />)}
