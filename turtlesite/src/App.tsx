@@ -1,4 +1,4 @@
-import React, { createRef, useMemo, useState } from 'react';
+import React, { createRef, useEffect, useMemo, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Canvas, Camera, useThree } from '@react-three/fiber';
@@ -35,6 +35,34 @@ function App() {
       })
     , [])
 
+  const ws = useMemo(() => {
+    const ws = new WebSocket("ws://localhost:5500/listner")
+    ws.addEventListener("open", () => console.log("open"))
+    return ws
+  }, [])
+
+  function wsMessage(data: MessageEvent<any>) {
+    const updatedBlock = JSON.parse(data.data) as typeBlock
+
+    const i = blocks.findIndex((block) => xyzEqual(block.pos, updatedBlock.pos))
+    console.log(updatedBlock, i, !!updatedBlock.name);
+    if (i > 0)
+      if (updatedBlock.name)
+        blocks[i] = updatedBlock
+      else
+        blocks.splice(i, 1)
+    else if (updatedBlock.name)
+      blocks.push(updatedBlock)
+
+    setblocks([...blocks])
+  }
+
+  useEffect(() => {
+    ws.addEventListener("message", wsMessage)
+
+    return () => ws.removeEventListener("message", wsMessage)
+  }, [ws, wsMessage])
+
   return (
     <div className="App">
       <div style={{
@@ -65,6 +93,12 @@ function App() {
 }
 
 export default App;
+
+function xyzEqual(a: typexyz, b: typexyz) {
+  return a.x === b.x &&
+    a.y === b.y &&
+    a.z === b.z
+}
 
 // 1 1 1 1
 // 8 4 2 1
