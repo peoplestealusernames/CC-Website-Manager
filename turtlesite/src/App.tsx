@@ -50,9 +50,9 @@ function App() {
       </div>
       <Canvas
         style={{ position: "absolute", width: "100%", height: "100%" }}
-        camera={{ position: [-10, 60, 0], near: 5, far: 400 }}
+        camera={{ position: [-10, 60, 0], near: 1, far: 400 }}
       >
-        <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
+        <OrbitControls target={[0, 60, 0]} enablePan={true} enableZoom={true} enableRotate={true} />
         <pointLight position={[-10, 100, 100]} intensity={2} />
         {blocks.map((e, i) => <BlockRender key={i} block={e} />)}
         {computers.map((e, i) => <RenderTurtle key={i} turtle={e} />)}
