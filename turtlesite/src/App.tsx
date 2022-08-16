@@ -1,12 +1,13 @@
-import React, { useMemo, useState } from 'react';
+import React, { createRef, useMemo, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Canvas, Camera, useThree } from '@react-three/fiber';
 import { BlockRender } from './Block';
 import axios from 'axios';
-import { typeBlock, typeComputer } from './type';
+import { typeBlock, typeComputer, typexyz } from './type';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
 import { RenderTurtle } from './Turtle';
+import { CameraMover } from './cameraMover';
 
 function App() {
   const [blocks, setblocks] = useState<typeBlock[]>([])
@@ -22,6 +23,7 @@ function App() {
     , [])
 
   const [computers, setcomputers] = useState<typeComputer[]>([])
+  const [pos, setpos] = useState<typexyz>({ x: 0, y: 60, z: 0 })
 
   useMemo(() =>
     axios.get(`http://localhost:5500/computers`)
@@ -43,17 +45,18 @@ function App() {
         alignContent: "center",
       }}>
         {computers.map((e, i) =>
-          <button key={i} onClick={() => { }}>
+          <button key={i} onClick={() => setpos({ x: e.pos.x - 10, y: e.pos.y, z: e.pos.z })}>
             {e.id}
           </button>
         )}
       </div>
       <Canvas
         style={{ position: "absolute", width: "100%", height: "100%" }}
-        camera={{ position: [-10, 60, 0], near: 1, far: 400 }}
+        camera={{ position: [pos.x, pos.y, pos.z], near: 1, far: 400 }}
       >
-        <OrbitControls target={[0, 60, 0]} enablePan={true} enableZoom={true} enableRotate={true} />
+        <OrbitControls target={[pos.x + 1, pos.y, pos.z]} enablePan={true} enableZoom={true} enableRotate={true} />
         <pointLight position={[-10, 100, 100]} intensity={2} />
+        <CameraMover pos={pos} />
         {blocks.map((e, i) => <BlockRender key={i} block={e} />)}
         {computers.map((e, i) => <RenderTurtle key={i} turtle={e} />)}
       </Canvas>
