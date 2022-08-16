@@ -9,8 +9,11 @@ export function BlockRender(props: {
     block: typeBlock
 }) {
     let pngname = `${props.block.name.split(":").splice(1).join(":")}`
-    if (!Object.hasOwn(textureMap, pngname))
+    if (!Object.hasOwn(textureMap, pngname)) {
+        console.error(`Missing texture: "${pngname}"`)
         pngname = "null"
+    }
+
     const [colorMap, nullmap] = useTexture([`textures/${pngname}.png`, "textures/null.png"])
 
     return (
