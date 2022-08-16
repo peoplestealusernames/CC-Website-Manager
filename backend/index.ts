@@ -7,7 +7,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import { sendCommand, sendCommands } from "./computerAPI/sendCommands";
 import { setupComputerSocket } from "./computerAPI/socketSetup";
 import { GetAllBlocks } from "./dataBase/manager";
-import { Forward, updateSurroundings } from "./turtleAPI/movement";
+import { Forward, Left, Right, updateSurroundings } from "./turtleAPI/movement";
 import { Turtle } from "./turtleAPI/turtleTypes";
 
 const computers: { [id: string]: Turtle } = {}
@@ -38,6 +38,32 @@ app.post("/move/:computer", async (req, res) => {
         return
     }
     res.json(await Forward(turtle))
+    res.statusCode = 200
+    res.end()
+})
+
+app.post("/left/:computer", async (req, res) => {
+    const turtle = computers[req.params.computer]
+    if (!turtle) {
+        res.write("Computer not found")
+        res.statusCode = 404
+        res.end()
+        return
+    }
+    res.json(await Left(turtle))
+    res.statusCode = 200
+    res.end()
+})
+
+app.post("/right/:computer", async (req, res) => {
+    const turtle = computers[req.params.computer]
+    if (!turtle) {
+        res.write("Computer not found")
+        res.statusCode = 404
+        res.end()
+        return
+    }
+    res.json(await Right(turtle))
     res.statusCode = 200
     res.end()
 })

@@ -13,6 +13,21 @@ export async function Forward(turtle: Turtle) {
     return [result, err]
 }
 
+
+export async function Right(turtle: Turtle) {
+    const [compile, result, err] = await sendCommand(turtle.sock, "Right()")
+    if (!compile)
+        throw new Error(result)
+    return [result, err]
+}
+
+export async function Left(turtle: Turtle) {
+    const [compile, result, err] = await sendCommand(turtle.sock, "Left()")
+    if (!compile)
+        throw new Error(result)
+    return [result, err]
+}
+
 export async function updateSurroundings(turtle: Turtle) {
     const blocks = await getSurroundings(turtle)
     const offsets: xyz[] = [{ x: 0, y: 1, z: 0 }, { x: 1, y: 0, z: 0 }, { x: 0, y: -1, z: 0 }]
