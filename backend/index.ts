@@ -7,7 +7,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import { sendCommand, sendCommands } from "./computerAPI/sendCommands";
 import { setupComputerSocket } from "./computerAPI/socketSetup";
 import { GetAllBlocks } from "./dataBase/manager";
-import { updateSurroundings } from "./turtleAPI/movement";
+import { Forward, updateSurroundings } from "./turtleAPI/movement";
 import { Turtle } from "./turtleAPI/turtleTypes";
 
 const computers: { [id: string]: Turtle } = {}
@@ -37,7 +37,7 @@ app.post("/move/:computer", async (req, res) => {
         res.end()
         return
     }
-    res.json(await sendCommand(turtle.sock, "Forward()"))
+    res.json(await Forward(turtle))
     res.statusCode = 200
     res.end()
 })

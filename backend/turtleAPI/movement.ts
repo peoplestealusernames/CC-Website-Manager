@@ -1,13 +1,16 @@
 import { JsonDB } from "node-json-db";
 import { WebSocket } from "ws";
-import { sendCommands } from "../computerAPI/sendCommands";
+import { sendCommand, sendCommands } from "../computerAPI/sendCommands";
 import { block } from "../dataBase/DBtypes";
 import { UpdateBlocks } from "../dataBase/manager";
 import { addPos, xyz } from "../posManager";
 import { Turtle } from "./turtleTypes";
 
-export function forward(turtle: Turtle) {
-
+export async function Forward(turtle: Turtle) {
+    const [compile, result, err] = await sendCommand(turtle.sock, "Forward()")
+    if (!compile)
+        throw new Error(result)
+    return [result, err]
 }
 
 export async function updateSurroundings(turtle: Turtle) {
