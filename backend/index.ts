@@ -6,6 +6,7 @@ import { Config } from "node-json-db/dist/lib/JsonDBConfig";
 import { WebSocketServer, WebSocket } from "ws";
 import { sendCommand, sendCommands } from "./computerAPI/sendCommands";
 import { setupComputerSocket } from "./computerAPI/socketSetup";
+import { block } from "./dataBase/DBtypes";
 import { databaseEvent, GetAllBlocks } from "./dataBase/manager";
 import { Forward, Left, Right, updateSurroundings } from "./turtleAPI/movement";
 import { Turtle } from "./turtleAPI/turtleTypes";
@@ -104,7 +105,7 @@ sock.on('connection', (client, req) => {
         setupComputerSocket(computers[req.headers.computerid])
         console.log(`Computer: ${req.headers.computerid} connected`);
     } else if (req.url === "/listner") {
-        databaseEvent.on("blockUpdate", client.send)
+        databaseEvent.on("blockUpdate", (updatedblock: block) => client.send(JSON.stringify(updatedblock)))
         client.on("close", () => databaseEvent.off("blockUpdate", client.send))
     }
     client.on("close", () => console.log("close"))
