@@ -6,6 +6,10 @@ import { block } from "./DBtypes"
 
 export async function UpdateBlocks(db: JsonDB, ...blocks: block[]) {
     for (const block of blocks) {
-        await db.push(`/blocks/${block.pos.x},${block.pos.y},${block.pos.z}`, block, true)
+        const path = `/blocks/${block.pos.x},${block.pos.y},${block.pos.z}`
+        if (block.name)
+            await db.push(path, block, true)
+        else
+            await db.delete(path)
     };
 }
