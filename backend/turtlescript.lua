@@ -21,6 +21,8 @@
 --Intro
 --Refrences
 
+local ws
+
 DirRef = {
     [1] = "-x", [2] = "-z", [3] = "+x", [4] = "+z",
     ["-x"] = 1, ["-z"] = 2, ["+x"] = 3, ["+z"] = 4,
@@ -49,6 +51,10 @@ function Update()
     file = fs.open("turtlePosition.txt", "w")
     file.write(textutils.serialise(Tab))
     file.close()
+    if (ws) then
+        ws.send(textutils.serialiseJSON({ pos = Pos, dir = Dir,
+            surrounding = { up = turtle.inspectUp(), forward = turtle.inspect(), down = turtle.inspectDown() } }))
+    end
 end
 
 --Position savers
@@ -200,14 +206,14 @@ Update()
 --Init
 
 function GetWS()
-    local ws, err = http.websocket("ws://localhost:5500",
+    local newws, err = http.websocket("ws://localhost:5500",
         { type = "computer", computerid = tostring(os.getComputerID()), pos = textutils.serialiseJSON(Pos),
             dir = tostring(Dir) })
-    if (not ws) then
+    if (not newws) then
         sleep(1)
         return GetWS()
     end
-    return ws
+    return newws
 end
 
 function ProccessCall(fncString)
@@ -221,22 +227,17 @@ function ProccessCall(fncString)
     return pcall(loadfnc);
 end
 
-function ReciveLoop(ws)
-    local previousPos = Pos
-    local previousDir = Dir
+function ReciveLoop()
     while true do
         local msg = ws.receive()
         ws.send(
             textutils.serialiseJSON({ ProccessCall(msg) })
         )
-        if (not (previousDir == Dir and previousPos == Pos)) then
-            print("update")
-            ws.send(textutils.serialiseJSON({ pos = Pos, dir = Dir }))
-        end
     end
 end
 
 while true do
-    local res, ws = pcall(GetWS)
+    local res
+    res, ws = pcall(GetWS)
     pcall(ReciveLoop, ws)
 end
