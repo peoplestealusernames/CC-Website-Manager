@@ -222,11 +222,17 @@ function ProccessCall(fncString)
 end
 
 function ReciveLoop(ws)
+    local previousPos = Pos
+    local previousDir = Dir
     while true do
         local msg = ws.receive()
         ws.send(
-            textutils.serialiseJSON { ProccessCall(msg) }
+            textutils.serialiseJSON({ ProccessCall(msg) })
         )
+        if (not (previousDir == Dir and previousPos == Pos)) then
+            print("update")
+            ws.send(textutils.serialiseJSON({ pos = Pos, dir = Dir }))
+        end
     end
 end
 
