@@ -102,7 +102,6 @@ sock.on('connection', (client, req) => {
         const pos = JSON.parse(req.headers.pos as string)
         computers[req.headers.computerid] = { type: "turtle", sock: client, pos, id: req.headers.computerid, dir: parseInt(req.headers.dir as string) }
         setupComputerSocket(computers[req.headers.computerid])
-        updateSurroundings(computers[req.headers.computerid])
         console.log(`Computer: ${req.headers.computerid} connected`);
     }
     client.on("close", () => console.log("close"))

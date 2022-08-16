@@ -28,17 +28,18 @@ export async function Left(turtle: Turtle) {
     return [result, err]
 }
 
-export async function updateSurroundings(turtle: Turtle) {
+/*export async function updateSurroundings(turtle: Turtle) {
     const blocks = await getSurroundings(turtle)
     const offsets: xyz[] = [{ x: 0, y: 1, z: 0 }, { x: 1, y: 0, z: 0 }, { x: 0, y: -1, z: 0 }]
 
-    const newBlocks = blocks.splice(1).map((e, i): block => {
-        e = e[1]
-        return {
-            name: e.name,
-            pos: addPos(turtle.pos, offsets[i])
-        }
-    })
+    const newBlocks = blocks.splice(1).map((e, i): block => {*/
+
+export async function updateSurroundings(turtle: Turtle, blocks: { up: string, forward: string, down: string }) {
+    const newBlocks: block[] = [
+        { name: blocks.up, pos: addPos(turtle.pos, { x: 0, y: 1, z: 0 }) },
+        { name: blocks.forward, pos: addPos(turtle.pos, { x: 1, y: 0, z: 0 }) },
+        { name: blocks.down, pos: addPos(turtle.pos, { x: 0, y: -1, z: 0 }) }
+    ]
 
     UpdateBlocks(...newBlocks)
 }
