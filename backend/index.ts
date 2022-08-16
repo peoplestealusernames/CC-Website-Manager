@@ -37,7 +37,7 @@ app.post("/move/:computer", async (req, res) => {
         res.end()
         return
     }
-    res.json(await sendCommand(turtle.sock, "turtle.forward()"))
+    res.json(await sendCommand(turtle.sock, "Forward()"))
     res.statusCode = 200
     res.end()
 })
