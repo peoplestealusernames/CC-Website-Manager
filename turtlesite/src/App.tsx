@@ -35,17 +35,20 @@ function App() {
   return (
     <div className="App">
       <div style={{
-        position: "absolute",
         width: "100vw",
         justifyContent: "center",
         justifyItems: "center",
         alignItems: "center",
         alignContent: "center",
       }}>
-        {computers.map(e => e.id)}
+        {computers.map((e, i) =>
+          <button key={i} onClick={() => { }}>
+            {e.id}
+          </button>
+        )}
       </div>
       <Canvas
-        style={{ position: "absolute", width: "100%", height: "100%" }}
+        style={{ width: "100%", height: "100%" }}
         camera={{ position: [-10, 0, 0], near: 5, far: 200 }}
       >
         <pointLight position={[-10, 100, 100]} intensity={2} />
