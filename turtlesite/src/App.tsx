@@ -49,7 +49,7 @@ function App() {
       </div>
       <Canvas
         style={{ position: "absolute", width: "100%", height: "100%" }}
-        camera={{ position: [-10, 0, 0], near: 5, far: 400 }}
+        camera={{ position: [-10, 60, 0], near: 5, far: 400 }}
       >
         <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
         <pointLight position={[-10, 100, 100]} intensity={2} />
