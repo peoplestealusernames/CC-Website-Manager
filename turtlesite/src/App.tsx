@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Canvas, Camera, useThree } from '@react-three/fiber';
-import { Box } from './three';
+import { BlockRender } from './Block';
 import axios from 'axios';
 import { typeBlock, typeComputer } from './type';
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei';
@@ -26,7 +26,6 @@ function App() {
     axios.get(`http://localhost:5500/computers`)
       .then(response => {
         const data = response.data as { [id: string]: typeComputer }
-        console.log(data)
         setcomputers(Object.values(data))
       }, error => {
         console.log(error);
@@ -54,8 +53,8 @@ function App() {
       >
         <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
         <pointLight position={[-10, 100, 100]} intensity={2} />
-        <Box position={[0, 0, 0]} />
-        {blocks.map((e, i) => <Box key={i} position={[e.pos.x, e.pos.y, e.pos.z]} />)}
+        <BlockRender position={[0, 0, 0]} />
+        {blocks.map((e, i) => <BlockRender key={i} position={[e.pos.x, e.pos.y, e.pos.z]} />)}
       </Canvas>
     </div>
   );

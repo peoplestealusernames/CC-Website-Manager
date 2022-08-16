@@ -1,9 +1,10 @@
-import { Object3DNode, useFrame } from "@react-three/fiber"
+import { Object3DNode, useFrame, Vector3 } from "@react-three/fiber"
 import { useRef, useState } from "react"
 
-export function Box(props: any) {
+export function BlockRender(props: {
+    position?: Vector3
+}) {
     // This reference will give us direct access to the mesh
-    const mesh = useRef()
     // Set up state for the hovered and active state
     const [hovered, setHover] = useState(false)
     const [active, setActive] = useState(false)
@@ -13,8 +14,7 @@ export function Box(props: any) {
     // Return view, these are regular three.js elements expressed in JSX
     return (
         <mesh
-            {...props}
-            ref={mesh}
+            position={props.position}
             scale={active ? 1.5 : 1}
             onClick={(event: any) => setActive(!active)}
             onPointerOver={(event: any) => setHover(true)}
