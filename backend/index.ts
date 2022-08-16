@@ -73,7 +73,8 @@ const sock = new WebSocketServer({ server })
 sock.on('connection', (client, req) => {
     console.log("connect")
     if (req.headers.type === "computer" && typeof req.headers.computerid === "string") {
-        computers[req.headers.computerid] = { type: "turtle", sock: client, pos: { x: 10, y: 10, z: 10 }, id: req.headers.computerid }
+        const pos = JSON.parse(req.headers.pos as string)
+        computers[req.headers.computerid] = { type: "turtle", sock: client, pos, id: req.headers.computerid }
         updateSurroundings(blockdata, computers[req.headers.computerid])
         console.log(`Computer: ${req.headers.computerid} connected`);
     }
