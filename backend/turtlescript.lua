@@ -52,8 +52,11 @@ function Update()
     file.write(textutils.serialise(Tab))
     file.close()
     if (ws) then
+        local upr, up = turtle.inspectUp()
+        local downr, down = turtle.inspectDown()
+        local forwardr, forward = turtle.inspect()
         ws.send(textutils.serialiseJSON({ pos = Pos, dir = Dir,
-            surrounding = { up = turtle.inspectUp(), forward = turtle.inspect(), down = turtle.inspectDown() } }))
+            surrounding = { up = up.name, down = down.name, forward = forward.name } }))
     end
 end
 
