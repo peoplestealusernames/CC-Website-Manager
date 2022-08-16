@@ -19,14 +19,6 @@
 -- -y = 6  Down
 
 --Intro
---Declariations
-
-local Pos, Dir
-
-local Update, Clamp, ClampDir
-local DirMove, MoveFnc
-
---Declariations
 --Refrences
 
 DirRef = {
@@ -219,7 +211,7 @@ function GetWS()
 end
 
 function ProccessCall(fncString)
-    local loadfnc, loaderr = load("return " .. fncString);
+    local loadfnc, loaderr = load("return " .. fncString, "any", "t", _ENV);
     if (not loadfnc) then
         loadfnc, loaderr = load(fncString);
     end
